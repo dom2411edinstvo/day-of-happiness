@@ -450,9 +450,7 @@
         <div class="pause-icon"><span></span><span></span></div>
       </button>
       <!-- Скрытый аудио-элемент. Вставьте прямую ссылку на MP3/аудио ниже -->
-      <audio id="audio" preload="auto"
-        src="ВСТАВЬТЕ_ССЫЛКУ_НА_ПЕСНЮ_СЮДА">
-      </audio>
+      <audio id="bgMusic" src="music.mp3" preload="auto"></audio>
     </div>
 
     <!-- Подпись -->
@@ -599,27 +597,23 @@
       });
     }
   </script>
-     /* ===== Управление музыкальным плеером ===== */
-    const audio = document.getElementById('audio');
-    const playBtn = document.getElementById('playBtn');
+  <script>
+const btn = document.getElementById('bgMusic');
+const music = document.getElementById('bgMusic');
 
-    function toggleMusic() {
-      if (audio.paused) {
-        audio.play().then(() => {
-          playBtn.classList.add('playing');
-        }).catch((e) => {
-          console.log('Не удалось воспроизвести:', e.message);
-        });
-      } else {
-        audio.pause();
-        playBtn.classList.remove('playing');
-      }
-    }
+btn.addEventListener('click', function() {
+  if (music.paused) {
+    music.play();
+    btn.textContent = '⏸';
+  } else {
+    music.pause();
+    btn.textContent = '▶';
+  }
+});
 
-    // Когда песня заканчивается — сбрасываем кнопку
-    audio.addEventListener('ended', () => {
-      playBtn.classList.remove('playing');
-    });
-
+music.addEventListener('ended', function() {
+  btn.textContent = '▶';
+});
+</script>
 </body>
 </html>
