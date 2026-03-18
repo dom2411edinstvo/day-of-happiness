@@ -210,9 +210,9 @@
     }
 
     .music-label {
-      font-size: 14px;
+      font-size: 18px;
       font-weight: 500;
-      color: #c0784a;
+      color: #3cb955;
       letter-spacing: 0.3px;
     }
 
@@ -298,14 +298,14 @@
     /* ===== Подпись внизу ===== */
     .footer {
       margin-top: 28px;
-      font-size: 13px;
-      color: #b8a090;
-      font-weight: 300;
+      font-size: 15px;
+      color: #3cb955;
+      font-weight: 400;
     }
 
     .footer .heart {
       display: inline-block;
-      color: #e8a0a0;
+      color: #f62213;
       animation: pulse 1.8s ease-in-out infinite;
       font-size: 16px;
     }
@@ -444,7 +444,7 @@
 
     <!-- Музыкальный блок -->
     <div class="music-section">
-      <span class="music-label">Песня сегодня</span>
+      <span class="music-label">Тоже о тебе</span>
       <button class="play-btn" id="playBtn" onclick="toggleMusic()">
         <div class="play-icon"></div>
         <div class="pause-icon"><span></span><span></span></div>
@@ -619,6 +619,149 @@
       bgMusic.currentTime = 0;
     });
   </script>
+  
+  <style>
+  .flying-item {
+    position: fixed;
+    bottom: -60px;
+    font-size: 28px;
+    z-index: 9999;
+    pointer-events: none;
+    animation: flyUp linear forwards;
+    opacity: 0.9;
+  }
+
+  @keyframes flyUp {
+    0% {
+      transform: translateY(0) rotate(0deg) scale(0.5);
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+      transform: translateY(-50px) rotate(15deg) scale(1);
+    }
+    50% {
+      opacity: 0.9;
+      transform: translateY(-40vh) rotate(-10deg) scale(1.1);
+    }
+    80% {
+      opacity: 0.6;
+    }
+    100% {
+      transform: translateY(-105vh) rotate(20deg) scale(0.8);
+      opacity: 0;
+    }
+  }
+</style>
+
+<style>
+  .flying-item {
+    position: fixed;
+    bottom: -60px;
+    font-size: 28px;
+    z-index: 9999;
+    pointer-events: none;
+    animation: flyUp linear forwards;
+    opacity: 0.95;
+    font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
+  }
+
+  @keyframes flyUp {
+    0% {
+      transform: translateY(0) rotate(0deg) scale(0.5);
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+      transform: translateY(-50px) rotate(15deg) scale(1);
+    }
+    50% {
+      opacity: 0.95;
+      transform: translateY(-40vh) rotate(-10deg) scale(1.1);
+    }
+    80% {
+      opacity: 0.7;
+    }
+    100% {
+      transform: translateY(-105vh) rotate(20deg) scale(0.8);
+      opacity: 0;
+    }
+  }
+
+  .fly-gold { color: #FFD700; }
+  .fly-red { color: #FF3B5C; }
+  .fly-purple { color: #A855F7; }
+  .fly-blue { color: #38BDF8; }
+</style>
+
+<script>
+(function() {
+  const items = [
+    { text: '●', color: 'fly-gold' },
+    { text: '●', color: 'fly-red' },
+    { text: '●', color: 'fly-purple' },
+    { text: '●', color: 'fly-blue' },
+    { text: '◆', color: 'fly-gold' },
+    { text: '◆', color: 'fly-red' },
+    { text: '◆', color: 'fly-purple' },
+    { text: '◆', color: 'fly-blue' },
+    { text: '★', color: 'fly-gold' },
+    { text: '★', color: 'fly-red' },
+    { text: '★', color: 'fly-purple' },
+    { text: '✦', color: 'fly-gold' },
+    { text: '✦', color: 'fly-blue' },
+    { text: '♥', color: 'fly-red' },
+    { text: '♥', color: 'fly-purple' },
+    { text: '❖', color: 'fly-gold' },
+    { text: '❖', color: 'fly-blue' },
+    { text: '✿', color: 'fly-purple' },
+    { text: '✿', color: 'fly-red' },
+    { text: '♦', color: 'fly-gold' },
+    { text: '♦', color: 'fly-red' }
+  ];
+
+  const columns = [35, 65];
+  let flyInterval = null;
+
+  function spawnItem() {
+    const el = document.createElement('div');
+    const item = items[Math.floor(Math.random() * items.length)];
+    
+    el.className = 'flying-item ' + item.color;
+    el.textContent = item.text;
+
+    const col = columns[Math.floor(Math.random() * columns.length)];
+    const offset = (Math.random() - 0.5) * 10;
+    el.style.left = (col + offset) + '%';
+
+    const duration = 3 + Math.random() * 3;
+    const size = 26 + Math.floor(Math.random() * 22);
+    el.style.fontSize = size + 'px';
+    el.style.animationDuration = duration + 's';
+
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), duration * 1000);
+  }
+
+  function startFlying() {
+    if (flyInterval) return;
+    flyInterval = setInterval(() => {
+      spawnItem();
+      if (Math.random() > 0.5) spawnItem();
+    }, 300);
+  }
+
+  function stopFlying() {
+    clearInterval(flyInterval);
+    flyInterval = null;
+  }
+
+  const audio = document.getElementById('bgMusic');
+  audio.addEventListener('play', startFlying);
+  audio.addEventListener('pause', stopFlying);
+  audio.addEventListener('ended', stopFlying);
+})();
+</script>
 
 </body>
 </html>
