@@ -200,9 +200,104 @@
       font-weight: 300;
     }
 
+    /* ===== Музыкальный блок ===== */
+    .music-section {
+      margin-top: 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .music-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: #c0784a;
+      letter-spacing: 0.3px;
+    }
+
+    .play-btn {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      background: linear-gradient(-45deg, #f8d9e0, #fce4d6, #e8dff5, #d5f0e8);
+      background-size: 300% 300%;
+      animation: btnGradient 8s ease infinite;
+      box-shadow:
+        0 4px 16px rgba(200, 160, 140, 0.25),
+        0 2px 6px rgba(200, 160, 140, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      position: relative;
+    }
+
+    .play-btn:hover {
+      transform: scale(1.08);
+      box-shadow:
+        0 6px 22px rgba(200, 160, 140, 0.35),
+        0 3px 10px rgba(200, 160, 140, 0.2);
+    }
+
+    .play-btn:active {
+      transform: scale(0.96);
+    }
+
+    /* Иконка play (треугольник) */
+    .play-icon {
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 10px 0 10px 18px;
+      border-color: transparent transparent transparent #e07070;
+      margin-left: 3px;
+      transition: opacity 0.2s ease;
+    }
+
+    /* Иконка pause (две полоски) */
+    .pause-icon {
+      display: none;
+      gap: 4px;
+    }
+
+    .pause-icon span {
+      display: block;
+      width: 5px;
+      height: 20px;
+      background: #e07070;
+      border-radius: 2px;
+    }
+
+    .play-btn.playing .play-icon {
+      display: none;
+    }
+
+    .play-btn.playing .pause-icon {
+      display: flex;
+    }
+
+    /* Пульсирующее кольцо при воспроизведении */
+    .play-btn.playing::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 2px solid #e8a0a0;
+      animation: ringPulse 1.8s ease-out infinite;
+    }
+
+    @keyframes ringPulse {
+      0%   { transform: scale(1); opacity: 0.6; }
+      100% { transform: scale(1.5); opacity: 0; }
+    }
+
     /* ===== Подпись внизу ===== */
     .footer {
-      margin-top: 32px;
+      margin-top: 28px;
       font-size: 13px;
       color: #b8a090;
       font-weight: 300;
@@ -347,9 +442,22 @@
       <p class="phrase-text" id="phraseText"></p>
     </div>
 
+    <!-- Музыкальный блок -->
+    <div class="music-section">
+      <span class="music-label">Песня сегодня</span>
+      <button class="play-btn" id="playBtn" onclick="toggleMusic()">
+        <div class="play-icon"></div>
+        <div class="pause-icon"><span></span><span></span></div>
+      </button>
+      <!-- Скрытый аудио-элемент. Вставьте прямую ссылку на MP3/аудио ниже -->
+      <audio id="audio" preload="auto"
+        src="ВСТАВЬТЕ_ССЫЛКУ_НА_ПЕСНЮ_СЮДА">
+      </audio>
+    </div>
+
     <!-- Подпись -->
     <div class="footer">
-      с теплотой и любовью <span class="heart">&#10084;</span>
+      с теплом и любовью, Артём <span class="heart">&#10084;</span>
     </div>
 
   </div>
@@ -490,6 +598,27 @@
         }
       });
     }
+    /* ===== Управление музыкальным плеером ===== */
+    const audio = document.getElementById('audio');
+    const playBtn = document.getElementById('playBtn');
+
+    function toggleMusic() {
+      if (audio.paused) {
+        audio.play().then(() => {
+          playBtn.classList.add('playing');
+        }).catch((e) => {
+          console.log('Не удалось воспроизвести:', e.message);
+        });
+      } else {
+        audio.pause();
+        playBtn.classList.remove('playing');
+      }
+    }
+
+    // Когда песня заканчивается — сбрасываем кнопку
+    audio.addEventListener('ended', () => {
+      playBtn.classList.remove('playing');
+    });
   </script>
 
 </body>
